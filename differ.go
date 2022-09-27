@@ -1,6 +1,7 @@
 package jsondiff
 
 import (
+	"fmt"
 	"sort"
 	"strings"
 )
@@ -206,6 +207,10 @@ func (d *Differ) compareObjects(ptr pointer, src, tgt map[string]interface{}) {
 // compareArrays generates the patch operations that
 // represents the differences between two JSON arrays.
 func (d *Differ) compareArrays(ptr pointer, src, tgt []interface{}) {
+
+	sort.Slice(src, func(i, j int) bool {
+		return fmt.Sprintf("%v", src[i]) > fmt.Sprintf("%v", src[j])
+	})
 	size := min(len(src), len(tgt))
 
 	// When the source array contains more elements
