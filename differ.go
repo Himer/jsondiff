@@ -206,7 +206,30 @@ func (d *Differ) compareObjects(ptr pointer, src, tgt map[string]interface{}) {
 
 // compareArrays generates the patch operations that
 // represents the differences between two JSON arrays.
-func (d *Differ) compareArrays(ptr pointer, src, tgt []interface{}) {
+func (d *Differ) compareArrays(ptr pointer, rawSrc, rawTgt []interface{}) {
+
+	var sumMap = map[string]int{}
+
+	for _, v := range rawSrc {
+		sumMap[fmt.Sprintf("%v", v)]++
+	}
+	for _, v := range rawTgt {
+		sumMap[fmt.Sprintf("%v", v)]++
+	}
+
+	src := make([]interface{}, 0, len(rawSrc))
+	tgt := make([]interface{}, 0, len(rawSrc))
+
+	for _, v := range rawSrc {
+		if sumMap[fmt.Sprintf("%v", v)] == 1 {
+			src = append(src, v)
+		}
+	}
+	for _, v := range rawTgt {
+		if sumMap[fmt.Sprintf("%v", v)] == 1 {
+			tgt = append(tgt, v)
+		}
+	}
 
 	sort.Slice(src, func(i, j int) bool {
 		return fmt.Sprintf("%v", src[i]) > fmt.Sprintf("%v", src[j])

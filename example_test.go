@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"testing"
 
 	"github.com/wI2L/jsondiff"
 )
@@ -172,14 +173,118 @@ func ExampleInvertible() {
 	// {"op":"add","path":"/c","value":"4"}
 }
 
-func ExampleFactorize() {
-	source := `{"a":[1,2,3],"b":{"foo":"bar"}}`
-	target := `{"a":[1,2,3],"c":[1,2,3],"d":{"foo":"bar"}}`
+func Test_ExampleFactorize(t *testing.T) {
+	source := `{"ApproverForms" : [{
+				"ApproverType" : 18,
+				"ApproverTypeDescription" : "",
+				"Forms" : [{
+						"ComponentId" : "seller_phone",
+						"ComponentName" : "ApproverMobile",
+						"ComponentRecipientId" : "",
+						"ComponentValue" : ""
+					}, {
+						"ComponentId" : "seller",
+						"ComponentName" : "ApproverName",
+						"ComponentRecipientId" : "",
+						"ComponentValue" : ""
+					}, {
+						"ComponentId" : "seller_id",
+						"ComponentName" : "ApproverIdCardNumber",
+						"ComponentRecipientId" : "",
+						"ComponentValue" : ""
+					}, {
+						"ComponentId" : "seller_id_type",
+						"ComponentName" : "ApproverIdCardType",
+						"ComponentRecipientId" : "",
+						"ComponentValue" : ""
+					}
+				]
+			}, {
+				"ApproverType" : 19,
+				"ApproverTypeDescription" : "",
+				"Forms" : [{
+						"ComponentId" : "buyer_phone",
+						"ComponentName" : "ApproverMobile",
+						"ComponentRecipientId" : "",
+						"ComponentValue" : ""
+					}, {
+						"ComponentId" : "buyer",
+						"ComponentName" : "ApproverName",
+						"ComponentRecipientId" : "",
+						"ComponentValue" : ""
+					}, {
+						"ComponentId" : "buyer_id",
+						"ComponentName" : "ApproverIdCardNumber",
+						"ComponentRecipientId" : "",
+						"ComponentValue" : ""
+					}, {
+						"ComponentId" : "buyer_id_type",
+						"ComponentName" : "ApproverIdCardType",
+						"ComponentRecipientId" : "",
+						"ComponentValue" : ""
+					}
+				]
+			}
+		]}`
+	target := `{		"ApproverForms" : [{
+				"ApproverType" : 19,
+				"ApproverTypeDescription" : "",
+				"Forms" : [{
+						"ComponentId" : "buyer_phone",
+						"ComponentName" : "ApproverMobile",
+						"ComponentRecipientId" : "",
+						"ComponentValue" : ""
+					}, {
+						"ComponentId" : "buyer",
+						"ComponentName" : "ApproverName",
+						"ComponentRecipientId" : "",
+						"ComponentValue" : ""
+					}, {
+						"ComponentId" : "buyer_id",
+						"ComponentName" : "ApproverIdCardNumber",
+						"ComponentRecipientId" : "",
+						"ComponentValue" : ""
+					}, {
+						"ComponentId" : "buyer_id_type",
+						"ComponentName" : "ApproverIdCardType",
+						"ComponentRecipientId" : "",
+						"ComponentValue" : ""
+					}
+				]
+			}, {
+				"ApproverType" : 18,
+				"ApproverTypeDescription" : "",
+				"Forms" : [{
+						"ComponentId" : "seller_id_type",
+						"ComponentName" : "ApproverIdCardType",
+						"ComponentRecipientId" : "",
+						"ComponentValue" : ""
+					}, {
+						"ComponentId" : "seller_phone",
+						"ComponentName" : "ApproverMobile",
+						"ComponentRecipientId" : "",
+						"ComponentValue" : ""
+					}, {
+						"ComponentId" : "seller",
+						"ComponentName" : "ApproverName",
+						"ComponentRecipientId" : "",
+						"ComponentValue" : ""
+					}, {
+						"ComponentId" : "seller_id",
+						"ComponentName" : "ApproverIdCardNumber",
+						"ComponentRecipientId" : "",
+						"ComponentValue" : ""
+					}
+				]
+			}
+		]}`
 
 	patch, err := jsondiff.CompareJSONOpts(
 		[]byte(source),
 		[]byte(target),
-		jsondiff.Factorize(),
+		jsondiff.Equivalent(),
+		//jsondiff.Rationalize(),
+		//jsondiff.Invertible(),
 	)
 	if err != nil {
 		log.Fatal(err)
